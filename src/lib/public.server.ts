@@ -1,31 +1,78 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { TELANGANA_DISTRICTS } from "./constants";
 import { sendGrievanceNotifications } from "./email.server";
 
 export type PublicTrainer = { id: string; name: string };
 export type PublicLocation = { id: string; district: string; name: string };
 
+async function ensureSeedData() {
+  const [{ count: trainerCount, error: trainerCountError }, { count: locationCount, error: locationCountError }] =
+    await Promise.all([
+      supabaseAdmin.from("trainers").select("id", { count: "exact", head: true }),
+      supabaseAdmin.from("training_locations").select("id", { count: "exact", head: true }),
+    ]);
+
+  if (trainerCountError) throw trainerCountError;
+  if (locationCountError) throw locationCountError;
+
+  if ((trainerCount ?? 0) === 0) {
+    const trainerSeed = Array.from({ length: 5 }, (_, index) => ({
+      code: `T${index + 1}`,
+      name: `Trainer ${index + 1}`,
+      email: `trainer${index + 1}@grievanceportal.app`,
+      is_active: true,
+      user_id: null,
+    }));
+
+    const { error: trainerInsertError } = await supabaseAdmin
+      .from("trainers")
+      .upsert(trainerSeed, { onConflict: "code" });
+    if (trainerInsertError) throw trainerInsertError;
+  }
+
+  if ((locationCount ?? 0) === 0) {
+    const locationSeed = TELANGANA_DISTRICTS.map((district) => ({
+      district,
+      name: `${district} Training Centre`,
+      is_active: true,
+    }));
+
+    const { error: locationInsertError } = await supabaseAdmin
+      .from("training_locations")
+      .upsert(locationSeed, { onConflict: "district,name" });
+    if (locationInsertError) throw locationInsertError;
+  }
+}
+
 export async function loadFormOptions(): Promise<{
   trainers: PublicTrainer[];
   locations: PublicLocation[];
 }> {
-  const [trainersRes, locationsRes] = await Promise.all([
-    supabaseAdmin
-      .from("trainers")
-      .select("id, name")
-      .eq("is_active", true)
-      .order("code", { ascending: true }),
-    supabaseAdmin
-      .from("training_locations")
-      .select("id, district, name")
-      .eq("is_active", true)
-      .order("name", { ascending: true }),
-  ]);
-  if (trainersRes.error) throw trainersRes.error;
-  if (locationsRes.error) throw locationsRes.error;
-  return {
-    trainers: (trainersRes.data ?? []) as PublicTrainer[],
-    locations: (locationsRes.data ?? []) as PublicLocation[],
-  };
+  try {
+    await ensureSeedData();
+
+    const [trainersRes, locationsRes] = await Promise.all([
+      supabaseAdmin
+        .from("trainers")
+        .select("id, name")
+        .eq("is_active", true)
+        .order("code", { ascending: true }),
+      supabaseAdmin
+        .from("training_locations")
+        .select("id, district, name")
+        .eq("is_active", true)
+        .order("name", { ascending: true }),
+    ]);
+    if (trainersRes.error) throw trainersRes.error;
+    if (locationsRes.error) throw locationsRes.error;
+    return {
+      trainers: (trainersRes.data ?? []) as PublicTrainer[],
+      locations: (locationsRes.data ?? []) as PublicLocation[],
+    };
+  } catch (error) {
+    console.error("Failed to load public form options:", error);
+    throw error;
+  }
 }
 
 export type SubmitInput = {

@@ -28,9 +28,13 @@ async function bootstrap() {
     user_metadata: { full_name: "Portal Administrator" },
   });
   if (adminError || !adminUser.user) {
-    return { status: 500 as const, body: { error: adminError?.message ?? "Admin create failed" } };
+    console.error("Admin create error:", adminError);
+    return { status: 500 as const, body: { error: adminError?.message ?? "Admin create failed", details: adminError } };
   }
-  await supabaseAdmin.from("user_roles").insert({ user_id: adminUser.user.id, role: "admin" });
+  const { error: adminRoleError } = await supabaseAdmin.from("user_roles").insert({ user_id: adminUser.user.id, role: "admin" });
+  if (adminRoleError) {
+    console.error("Admin role insert error:", adminRoleError);
+  }
   created.push({ role: "Admin", email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
 
   for (let i = 1; i <= 5; i += 1) {
@@ -42,16 +46,20 @@ async function bootstrap() {
       user_metadata: { full_name: `Trainer ${i}` },
     });
     if (error || !trainerUser.user) {
-      return { status: 500 as const, body: { error: error?.message ?? "Trainer create failed" } };
+      console.error(`Trainer ${i} create error:`, error);
+      return { status: 500 as const, body: { error: error?.message ?? "Trainer create failed", details: error } };
     }
-    await supabaseAdmin.from("user_roles").insert({ user_id: trainerUser.user.id, role: "trainer" });
-    await supabaseAdmin.from("trainers").insert({
+    const { error: roleError } = await supabaseAdmin.from("user_roles").insert({ user_id: trainerUser.user.id, role: "trainer" });
+    if (roleError) console.error(`Trainer ${i} role insert error:`, roleError);
+    
+    const { error: trainerError } = await supabaseAdmin.from("trainers").insert({
       user_id: trainerUser.user.id,
       code: `T${i}`,
       name: `Trainer ${i}`,
       email,
       is_active: true,
     });
+    if (trainerError) console.error(`Trainer ${i} table insert error:`, trainerError);
     created.push({ role: `Trainer ${i}`, email, password: TRAINER_PASSWORD });
   }
 
@@ -60,13 +68,16 @@ async function bootstrap() {
     .select("id")
     .limit(1);
   if (!locationCount || locationCount.length === 0) {
-    await supabaseAdmin.from("training_locations").insert(
+    const { error: locError } = await supabaseAdmin.from("training_locations").insert(
       TELANGANA_DISTRICTS.map((district) => ({
         district,
         name: `${district} Training Centre`,
         is_active: true,
       })),
     );
+    if (locError) {
+      console.error("Training locations insert error:", locError);
+    }
   }
 
   return { status: 200 as const, body: { ok: true, accounts: created } };
