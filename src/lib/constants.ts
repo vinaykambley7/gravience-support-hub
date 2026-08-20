@@ -38,18 +38,24 @@ export const TELANGANA_DISTRICTS = [
 ] as const;
 
 export const GRIEVANCE_CATEGORIES = [
-  "Training Content",
-  "Trainer Related",
-  "Certification / Exam",
-  "Login / Credentials Issue",
-  "Biometric Device Issue",
-  "Training Schedule",
-  "Training Material Not Received",
-  "Venue / Infrastructure",
-  "Fee / Payment",
-  "Attendance / Records",
-  "Technical Issue",
-  "Other",
+  "Aadhaar Enrolment & Update Process",
+  "Aadhaar Enrolment/Update Software Training",
+  "Operator & Supervisor Roles",
+  "Document Verification & Validation",
+  "Biometric Capture — Fingerprint",
+  "Iris Capture",
+  "Photograph Capture",
+  "Demographic & Biometric Updates",
+  "Head of Family (HoF) Process",
+  "Document-Based Update (DBU)",
+  "Aadhaar Authentication / Verification",
+  "Enrolment & Update Error Handling",
+  "UIDAI Rules, Guidelines & Compliance",
+  "Errors & Penalties",
+  "Enrolment Centre / Device Handling",
+  "Training Material / Practical Session",
+  "Assessment / Certification",
+  "Other Training Related",
 ] as const;
 
 export const PRIORITIES = ["Low", "Medium", "High", "Critical"] as const;

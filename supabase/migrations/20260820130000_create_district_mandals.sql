@@ -1,0 +1,44 @@
+CREATE TABLE IF NOT EXISTS public.district_mandals (
+  district text PRIMARY KEY,
+  mandals text[] NOT NULL
+);
+
+INSERT INTO public.district_mandals (district, mandals)
+VALUES
+  ('Adilabad', ARRAY['Adilabad Rural', 'Adilabad Urban', 'Bazarhatnoor', 'Bela', 'Bheempoor', 'Boath', 'Gadiguda', 'Gudihathnur', 'Ichoda', 'Inderavelly', 'Jainad', 'Mavala', 'Narnoor', 'Neradigonda', 'Sirikonda', 'Talamadagu', 'Tamsi', 'Utnoor']),
+  ('Bhadradri Kothagudem', ARRAY['Allapalli', 'Annapureddypally', 'Aswapuram', 'Aswaraopeta', 'Bhadrachalam', 'Burgampahad', 'Chandrugonda', 'Cherla', 'Chunchupally', 'Dammapeta', 'Dummugudem', 'Gundala', 'Julurpad', 'Karakagudem', 'Kothagudem', 'Laxmidevipalli', 'Manuguru', 'Mulakalapalle', 'Palvancha', 'Pinapaka', 'Sujathanagar', 'Tekulapalle', 'Yellandu']),
+  ('Hanamkonda', ARRAY['Atmakur', 'Bheemadevarapalle', 'Damera', 'Dharmasagar', 'Elkathurthy', 'Hanamkonda', 'Hasanparthy', 'Inavole', 'Kamalapur', 'Kazipet', 'Nadikuda', 'Parkal', 'Shayampet', 'Velair']),
+  ('Hyderabad', ARRAY['Amberpet', 'Ameerpet', 'Asif Nagar', 'Bahadurpura', 'Bandlaguda', 'Charminar', 'Golkonda', 'Himayathnagar', 'Khairtabad', 'Maredpally', 'Musheerabad', 'Nampally', 'Saidabad', 'Secunderabad', 'Shaikpet', 'Tirumalgiri']),
+  ('Jagtial', ARRAY['Beerpur', 'Bheemaram', 'Buggaram', 'Dharmapuri', 'Endapally', 'Gollapalle', 'Ibrahimpatnam', 'Jagtial', 'Jagtial Rural', 'Kathlapur', 'Kodimial', 'Korutla', 'Mallapur', 'Mallial', 'Medipalle', 'Metpalli', 'Pegadapalle', 'Raikal', 'Sarangapur', 'Velgatoor']),
+  ('Jangaon', ARRAY['Bachannapeta', 'Chilpur', 'Devaruppala', 'Jangaon', 'Kodakandla', 'Lingalaghanpur', 'Narmetta', 'Palakurthi', 'Raghunathapalle', 'Station Ghanpur', 'Tharigoppula', 'Zaffergadh']),
+  ('Jayashankar Bhupalpally', ARRAY['Bhupalpalle', 'Chityal', 'Ghanpur', 'Kataram', 'Mahadevpur', 'Maha Mutharam', 'Malharrao', 'Mogullapalle', 'Palimela', 'Regonda', 'Tekumatla']),
+  ('Jogulamba Gadwal', ARRAY['Aiza', 'Alampur', 'Dharur', 'Gadwal', 'Ghattu', 'Itikyal', 'Kaloor Timmanadoddi', 'Maldakal', 'Manopad', 'Rajoli', 'Undavelli', 'Waddepalle']),
+  ('Kamareddy', ARRAY['Banswada', 'Bhiknoor', 'Bibipet', 'Bichkunda', 'Birkoor', 'Domakonda', 'Dongli', 'Gandhari', 'Jukkal', 'Kamareddy', 'Lingampet', 'Machareddy', 'Madnur', 'Naga Reddipet', 'Nasurullabad', 'Nizamsagar', 'Pedda Kodapgal', 'Pitlam', 'Rajampet', 'Ramareddy', 'Sadasivanagar', 'Tadwai', 'Yellareddy']),
+  ('Karimnagar', ARRAY['Chigurumamidi', 'Choppadandi', 'Ellandakunta', 'Gangadhara', 'Ganneruvaram', 'Huzurabad', 'Jammikunta', 'Karimnagar', 'Karimnagar Rural', 'Kothapalli', 'Manakondur', 'Ramadugu', 'Shankarapatnam', 'Thimmapur', 'V. Saidapur', 'Veenavanka']),
+  ('Khammam', ARRAY['Bonakal', 'Chinthakani', 'Enkuru', 'Kalluru', 'Kamepalle', 'Khammam Rural', 'Khammam Urban', 'Konijerla', 'Kusumanchi', 'Madhira', 'Mudigonda', 'Nelakondapalle', 'Penuballi', 'Raghunadhapalem', 'Sathupalli', 'Singareni', 'Thallada', 'Thirumalayapalem', 'Vemsoor', 'Wyra', 'Yerrupalem']),
+  ('Komaram Bheem Asifabad', ARRAY['Asifabad', 'Bejjur', 'Chintalamanepally', 'Dahegaon', 'Jainoor', 'Kagaznagar', 'Kerameri', 'Kouthala', 'Lingapur', 'Penchikalpet', 'Rebbena', 'Sirpur (T)', 'Sirpur (U)', 'Tiryani', 'Wankidi']),
+  ('Mahabubabad', ARRAY['Bayyaram', 'Chinnagudur', 'Danthalapalle', 'Dornakal', 'Garla', 'Gudur', 'Inugurthy', 'Kesamudram', 'Kothaguda', 'Kuravi', 'Mahabubabad', 'Maripeda', 'Narsimhulapet', 'Nellikudur', 'Peddavangara', 'Thorrur']),
+  ('Mahabubnagar', ARRAY['Addakal', 'Balanagar', 'Bhoothpur', 'Chinna Chinta Kunta', 'Devarkadara', 'Gandeed', 'Hanwada', 'Jadcherla', 'Koilkonda', 'Mahabubnagar Rural', 'Mahabubnagar Urban', 'Midjil', 'Mohammadabad', 'Musapet', 'Nawabpet', 'Rajapur']),
+  ('Mancherial', ARRAY['Bellampally', 'Bheemaram', 'Bheemini', 'Chennur', 'Dandepally', 'Hajipur', 'Jaipur', 'Jannaram', 'Kannepally', 'Kasipet', 'Kotapally', 'Luxettipet', 'Mancherial', 'Mandamarri', 'Naspur', 'Nennel', 'Tandur', 'Vemanpally']),
+  ('Medak', ARRAY['Alladurg', 'Chegunta', 'Chilipched', 'Havelighanpur', 'Kowdipalle', 'Kulcharam', 'Manoharabad', 'Masaipet', 'Medak', 'Narsapur', 'Narsingi', 'Nizampet', 'Papannapet', 'Ramayampet', 'Regode', 'Shankarampet (A)', 'Shankarampet (R)', 'Shivampet', 'Tekmal', 'Tupran', 'Yeldurthy']),
+  ('Medchal-Malkajgiri', ARRAY['Alwal', 'Bachupally', 'Balanagar', 'Dundigal Gandimaisamma', 'Ghatkesar', 'Kapra', 'Keesara', 'Kukatpally', 'Malkajgiri', 'Medchal', 'Medipally', 'Muduchintalpalli', 'Quthbullapur', 'Shamirpet', 'Uppal']),
+  ('Mulugu', ARRAY['Eturnagaram', 'Govindaraopet', 'Kannaigudem', 'Mangapet', 'Mulugu', 'Tadvai', 'Venkatapur', 'Venkatapuram', 'Wazeed']),
+  ('Nagarkurnool', ARRAY['Achampet', 'Amrabad', 'Balmoor', 'Bijinapalle', 'Charakonda', 'Kalwakurthy', 'Kodair', 'Kollapur', 'Lingal', 'Nagarkurnool', 'Padra', 'Peddakothapalle', 'Pentlavelli', 'Tadoor', 'Telkapalle', 'Thimmajipeta', 'Uppunuthala', 'Urkonda', 'Vangoor', 'Veldanda']),
+  ('Nalgonda', ARRAY['Adavi Devulapalli', 'Anumula', 'Chandampet', 'Chandur', 'Chinthapalle', 'Chityal', 'Damaracherla', 'Devarakonda', 'Gundlapalle', 'Gurrampode', 'Kanagal', 'Kattangoor', 'Kethepally', 'Kondamallapally', 'Madugulapally', 'Marriguda', 'Miryalaguda', 'Munugode', 'Nakrekal', 'Nalgonda', 'Nampalle', 'Narayanapur', 'Neredugommu', 'Nidamanur', 'Pedda Adiserlapalle', 'Peddavoora', 'Shaligauraram', 'Thipparthi', 'Thripuraram', 'Tirumalagiri Sagar', 'Vemulapalle']),
+  ('Narayanpet', ARRAY['Damaragidda', 'Dhanwada', 'Kosgi', 'Krishna', 'Maddur', 'Maganoor', 'Makthal', 'Marikal', 'Narayanpet', 'Narva', 'Utkoor']),
+  ('Nirmal', ARRAY['Basar', 'Bhainsa', 'Dilawarpur', 'Kadam', 'Khanapur', 'Kubeer', 'Kuntala', 'Laxmanchanda', 'Lokeswaram', 'Mamda', 'Mudhole', 'Narsapur (G)', 'Nirmal Rural', 'Nirmal Urban', 'Pembi', 'Sarangapur', 'Soan', 'Tanur']),
+  ('Nizamabad', ARRAY['Armoor', 'Balkonda', 'Bheemgal', 'Bodhan', 'Chandur', 'Dharpally', 'Dichpalli', 'Indalwai', 'Jakranpalli', 'Kammarpally', 'Kotgiri', 'Makloor', 'Mendora', 'Morthad', 'Mosra', 'Mugpal', 'Navipet', 'Nizamabad North', 'Nizamabad Rural', 'Nizamabad South', 'Nizamabad Urban', 'Ranjal', 'Rudrur', 'Sirikonda', 'Velpur', 'Varni', 'Yedpally', 'Yeragatla']),
+  ('Peddapalli', ARRAY['Antargaon', 'Anantharam', 'Eligaid', 'Julapalli', 'Kamanpur', 'Dharmaram', 'Manthani', 'Mutharam', 'Odela', 'Palakurthi', 'Peddapalli', 'Ramagiri', 'Ramagundam', 'Sultanabad']),
+  ('Rajanna Sircilla', ARRAY['Boinpalle', 'Chandurthi', 'Ghambiraopet', 'Illanthakunta', 'Konaraopet', 'Mustabad', 'Rudrangi', 'Sircilla', 'Thangallapalli', 'Veernapalli', 'Vemulawada', 'Vemulawada Rural', 'Yellareddypet']),
+  ('Rangareddy', ARRAY['Abdullapurmet', 'Amangal', 'Balapur', 'Chevella', 'Chowdergudem', 'Farooqnagar', 'Gachibowli', 'Gandipet', 'Hayathnagar', 'Ibrahimpatnam', 'Kadthal', 'Keshampet', 'Kondurg', 'Kothur', 'Madgul', 'Maheshwaram', 'Manchal', 'Moinabad', 'Nandigama', 'Rajendranagar', 'Serilingampally', 'Shabad', 'Shamshabad', 'Shankarpalle', 'Talakondapally', 'Yacharam']),
+  ('Sangareddy', ARRAY['Ameenpur', 'Andole', 'Gummadidala', 'Hathnoora', 'Jharasangam', 'Jinnaram', 'Kalher', 'Kandi', 'Kangti', 'Karasgutty', 'Kohir', 'Kondapur', 'Manoor', 'Munipally', 'Nagalgidda', 'Narayankhed', 'Nyalkal', 'Patancheru', 'Pulkal', 'Ramachandrapuram', 'Sadasivpet', 'Sangareddy', 'Sirgapoor', 'Vatpally', 'Zaheerabad']),
+  ('Siddipet', ARRAY['Akkannapet', 'Bejjanki', 'Cherial', 'Chinnakodur', 'Doultabad', 'Dubbak', 'Gajwel', 'Husnabad', 'Jagdevpur', 'Koheda', 'Komuravelli', 'Kondapak', 'Maddur', 'Markook', 'Mirdoddi', 'Mulug', 'Nangnoor', 'Raipole', 'Siddipet Rural', 'Siddipet Urban', 'Toguta', 'Wargal']),
+  ('Suryapet', ARRAY['Ananthagiri', 'Atmakur (S)', 'Chilkur', 'Chivvemla', 'Garidepalle', 'Huzurnagar', 'Jajireddygudem', 'Kodad', 'Maddirala', 'Mallareddygudem', 'Mattampally', 'Mellachervu', 'Mothey', 'Munagala', 'Nadigudem', 'Nereducherla', 'Nuthankal', 'Palakeedu', 'Penpahad', 'Suryapet', 'Thirumalagiri', 'Tungathurthi']),
+  ('Vikarabad', ARRAY['Bantwaram', 'Bashirabad', 'Bomraspet', 'Dharur', 'Doma', 'Doulatabad', 'Kodangal', 'Kotepally', 'Kulkacharla', 'Marpalle', 'Mominpet', 'Nawabpet', 'Pargi', 'Peddemul', 'Pudur', 'Tandur', 'Vikarabad', 'Yalal']),
+  ('Wanaparthy', ARRAY['Amarchinta', 'Atmakur', 'Chinnambavi', 'Ghanpur', 'Gopalpeta', 'Kothakota', 'Madanapur', 'Pangal', 'Pebbair', 'Peddamandadi', 'Revally', 'Srirangapur', 'Wanaparthy', 'Weepangandla']),
+  ('Warangal', ARRAY['Chennaraopet', 'Duggondi', 'Geesugonda', 'Khila Warangal', 'Khanapur', 'Nallabelli', 'Narsampet', 'Nekkonda', 'Parvathagiri', 'Rayaparthy', 'Sangem', 'Wardhannapet']),
+  ('Yadadri Bhuvanagiri', ARRAY['Addagudur', 'Alair', 'Atmakur (M)', 'Bhongir', 'Bibinagar', 'Bhoodan Pochampally', 'Bommalaramaram', 'Choutuppal', 'Gundala', 'Motakondur', 'Narayanpur', 'Rajapet', 'Ramannapet', 'Turkapally', 'Valigonda', 'Yadagirigutta'])
+ON CONFLICT (district) DO UPDATE
+SET mandals = EXCLUDED.mandals;
+
+GRANT SELECT ON public.district_mandals TO anon, authenticated;

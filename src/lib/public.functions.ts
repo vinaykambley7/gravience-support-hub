@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 import { createGrievance, fetchTracking, loadFormOptions } from "./public.server";
+import { DISTRICT_MANDALS } from "./districtMandals";
 
 export const getFormOptions = createServerFn({ method: "GET" }).handler(async () =>
   loadFormOptions(),
@@ -19,6 +20,7 @@ export const submitGrievance = createServerFn({ method: "POST" })
           .regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number"),
         centre_name: z.string().trim().min(2).max(160),
         district: z.string().trim().min(2).max(80),
+        mandal: z.string().trim().min(2).max(80),
         training_location: z.string().trim().min(2).max(160),
         trainer_id: z.string().uuid(),
         training_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -34,6 +36,19 @@ export const submitGrievance = createServerFn({ method: "POST" })
           })
           .nullable()
           .optional(),
+      })
+      .superRefine((value, ctx) => {
+        const mandals =
+          DISTRICT_MANDALS[value.district as keyof typeof DISTRICT_MANDALS] as
+            | readonly string[]
+            | undefined;
+        if (!mandals?.includes(value.mandal)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["mandal"],
+            message: "Select a mandal belonging to the selected district",
+          });
+        }
       })
       .parse(data),
   )

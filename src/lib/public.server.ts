@@ -15,10 +15,11 @@ async function ensureSeedData() {
   if (trainerCountError) throw trainerCountError;
   if (locationCountError) throw locationCountError;
 
+  const trainerNames = ["Vinay", "Pavan", "Rakesh", "Kishore", "Karthikeya"];
   if ((trainerCount ?? 0) === 0) {
-    const trainerSeed = Array.from({ length: 5 }, (_, index) => ({
+    const trainerSeed = trainerNames.map((name, index) => ({
       code: `T${index + 1}`,
-      name: `Trainer ${index + 1}`,
+      name,
       email: `trainer${index + 1}@grievanceportal.app`,
       is_active: true,
       user_id: null,
@@ -28,6 +29,17 @@ async function ensureSeedData() {
       .from("trainers")
       .upsert(trainerSeed, { onConflict: "code" });
     if (trainerInsertError) throw trainerInsertError;
+  } else {
+    const trainerUpdates = await Promise.all(
+      trainerNames.map((name, index) =>
+        supabaseAdmin
+          .from("trainers")
+          .update({ name })
+          .eq("code", `T${index + 1}`),
+      ),
+    );
+    const trainerUpdateError = trainerUpdates.find((result) => result.error)?.error;
+    if (trainerUpdateError) throw trainerUpdateError;
   }
 
   if ((locationCount ?? 0) === 0) {
@@ -81,6 +93,7 @@ export type SubmitInput = {
   mobile_number: string;
   centre_name: string;
   district: string;
+  mandal: string;
   training_location: string;
   trainer_id: string;
   training_date: string;
@@ -113,6 +126,7 @@ export async function createGrievance(input: SubmitInput): Promise<{ grievance_i
       mobile_number: input.mobile_number,
       centre_name: input.centre_name,
       district: input.district,
+      mandal: input.mandal.trim(),
       training_location: input.training_location,
       trainer_id: trainer.id,
       trainer_name: trainer.name,

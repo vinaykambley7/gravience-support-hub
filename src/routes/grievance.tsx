@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, CheckCircle2, Loader2, Upload } from "lucide-react";
+import { ArrowLeft, Check, CheckCircle2, ChevronsUpDown, Loader2, Upload } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { GRIEVANCE_CATEGORIES, PRIORITIES, TELANGANA_DISTRICTS } from "@/lib/constants";
+import { GRIEVANCE_CATEGORIES, TELANGANA_DISTRICTS } from "@/lib/constants";
+import { DISTRICT_MANDALS } from "@/lib/districtMandals";
 import { getFormOptions, submitGrievance } from "@/lib/public.functions";
 import { cn } from "@/lib/utils";
 
@@ -39,6 +40,7 @@ type FormState = {
   mobile_number: string;
   centre_name: string;
   district: string;
+  mandal: string;
   training_location: string;
   trainer_id: string;
   training_date: string;
@@ -54,6 +56,7 @@ const EMPTY: FormState = {
   mobile_number: "",
   centre_name: "",
   district: "",
+  mandal: "",
   training_location: "",
   trainer_id: "",
   training_date: "",
@@ -111,6 +114,79 @@ function Section({
 const selectClass =
   "h-12 w-full rounded-lg border border-input bg-surface px-3 text-base text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30";
 
+function MandalPicker({
+  disabled,
+  mandals,
+  value,
+  onChange,
+}: {
+  disabled: boolean;
+  mandals: readonly string[];
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const filteredMandals = mandals.filter((mandal) =>
+    mandal.toLowerCase().includes(search.trim().toLowerCase()),
+  );
+
+  return (
+    <div className="relative">
+        <Button
+          type="button"
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          disabled={disabled}
+          onClick={() => setOpen((current) => !current)}
+          className="h-12 w-full justify-between rounded-lg bg-surface px-3 text-base font-normal"
+        >
+          <span className={cn("truncate", !value && "text-muted-foreground")}>
+            {disabled ? "Select District First" : value || "Select mandal"}
+          </span>
+          <ChevronsUpDown className="size-4 shrink-0 opacity-50" />
+        </Button>
+        {open && !disabled && (
+          <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-border bg-popover shadow-lg">
+            <div className="border-b border-border p-2">
+              <Input
+                autoFocus
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search mandal..."
+                className="h-9"
+              />
+            </div>
+            <div className="max-h-60 overflow-y-auto p-1">
+              {filteredMandals.length === 0 ? (
+                <p className="px-3 py-5 text-center text-sm text-muted-foreground">
+                  No mandal found.
+                </p>
+              ) : (
+                filteredMandals.map((mandal) => (
+                  <button
+                    type="button"
+                    key={mandal}
+                    className="flex w-full items-center rounded-md px-3 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                    onClick={() => {
+                      onChange(mandal);
+                      setSearch("");
+                      setOpen(false);
+                    }}
+                  >
+                    <Check className={cn("mr-2", value === mandal ? "opacity-100" : "opacity-0")} />
+                    {mandal}
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+    </div>
+  );
+}
+
 function GrievancePage() {
   const [form, setForm] = useState<FormState>(EMPTY);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -142,6 +218,7 @@ function GrievancePage() {
     () => (options?.locations ?? []).filter((l) => l.district === form.district),
     [options, form.district],
   );
+  const mandals = DISTRICT_MANDALS[form.district as keyof typeof DISTRICT_MANDALS] ?? [];
   const trainers = options?.trainers ?? [];
 
   const set = (key: keyof FormState, value: string) => {
@@ -160,6 +237,7 @@ function GrievancePage() {
     req("mobile_number", "Mobile number");
     req("centre_name", "Enrolment centre / agency");
     req("district", "District");
+    req("mandal", "Mandal");
     req("training_location", "Training location");
     req("trainer_id", "Trainer name");
     req("training_date", "Training date");
@@ -272,13 +350,17 @@ function GrievancePage() {
             </Field>
           </Section>
 
-          <Section title="Training Details" description="Where and with whom the training happened.">
+          <Section
+            title="Training Details"
+            description="Where and with whom the training happened."
+          >
             <Field label="Telangana District" required error={errors["district"]}>
               <select
                 className={selectClass}
                 value={form.district}
                 onChange={(e) => {
                   set("district", e.target.value);
+                  set("mandal", "");
                   set("training_location", "");
                 }}
               >
@@ -289,6 +371,14 @@ function GrievancePage() {
                   </option>
                 ))}
               </select>
+            </Field>
+            <Field label="Mandal" required error={errors["mandal"]}>
+              <MandalPicker
+                disabled={!form.district}
+                mandals={mandals}
+                value={form.mandal}
+                onChange={(value) => set("mandal", value)}
+              />
             </Field>
             <Field label="Training Location" required error={errors["training_location"]}>
               <select
@@ -373,25 +463,6 @@ function GrievancePage() {
                 onChange={(e) => set("description", e.target.value)}
                 placeholder="Describe the issue with dates and details"
               />
-            </Field>
-            <Field label="Priority">
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                {PRIORITIES.map((p) => (
-                  <button
-                    key={p}
-                    type="button"
-                    onClick={() => set("priority", p)}
-                    className={cn(
-                      "h-12 rounded-lg border text-sm font-medium transition-colors",
-                      form.priority === p
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-input bg-surface hover:bg-muted",
-                    )}
-                  >
-                    {p}
-                  </button>
-                ))}
-              </div>
             </Field>
             <Field label="Attachment (optional)">
               <label className="flex h-12 cursor-pointer items-center gap-2 rounded-lg border border-dashed border-input px-3 text-sm text-muted-foreground">
